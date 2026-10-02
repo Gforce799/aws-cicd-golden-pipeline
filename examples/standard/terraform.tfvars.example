@@ -1,8 +1,0 @@
-name        = "cicd-golden-pipeline"
-environment = "dev"
-aws_region  = "us-east-1"
-
-tags = {
-  Owner      = "platform-team"
-  CostCenter = "portfolio"
-}
