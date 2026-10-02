@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - aws ecr get-login-password | docker login --username AWS --password-stdin "$ECR_REPOSITORY_URI"
+      - IMAGE_TAG="${CODEBUILD_RESOLVED_SOURCE_VERSION:0:12}"
+  build:
+    commands:
+      - docker build -t "$ECR_REPOSITORY_URI:$IMAGE_TAG" .
+      - docker push "$ECR_REPOSITORY_URI:$IMAGE_TAG"
+  post_build:
+    commands:
+      - printf '{"image":"%s"}' "$ECR_REPOSITORY_URI:$IMAGE_TAG" > image-detail.json
+artifacts:
+  files:
+    - image-detail.json
